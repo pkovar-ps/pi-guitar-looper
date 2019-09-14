@@ -1,5 +1,3 @@
-"""PyAudio Example: Play a wave file (callback version)."""
-
 import pyaudio
 import wave
 import time
