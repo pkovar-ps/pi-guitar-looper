@@ -11,21 +11,21 @@ CHUNK = 1024
 loop_cnt = 0
 wfs = []
 
-wfs.append(wave.open("sample.wav", 'rb'))
+wfs.append(wave.open("audio_samples/sample.wav", 'rb'))
 '''
-wfs.append(wave.open("multitrack/01_Kick.wav", 'rb'))
-wfs.append(wave.open("multitrack/02_Snare.wav", 'rb'))
-wfs.append(wave.open("multitrack/03_Hat.wav", 'rb'))
-wfs.append(wave.open("multitrack/05_Bass.wav", 'rb'))
-wfs.append(wave.open("multitrack/06_ElecGtr1.wav", 'rb'))
-wfs.append(wave.open("multitrack/07_ElecGtr2.wav", 'rb'))
-wfs.append(wave.open("multitrack/08_ElecGtr3.wav", 'rb'))
-wfs.append(wave.open("multitrack/09_LeadVox.wav", 'rb'))
-wfs.append(wave.open("multitrack/10_BackingVox1.wav", 'rb'))
-wfs.append(wave.open("multitrack/11_BackingVox2.wav", 'rb'))
-wfs.append(wave.open("multitrack/12_BackingVox3.wav", 'rb'))
-wfs.append(wave.open("multitrack/13_BackingVox4.wav", 'rb'))
-wfs.append(wave.open("multitrack/14_BackingVox5.wav", 'rb'))
+wfs.append(wave.open("audio_samples/multitrack/01_Kick.wav", 'rb'))
+wfs.append(wave.open("audio_samples/multitrack/02_Snare.wav", 'rb'))
+wfs.append(wave.open("audio_samples/multitrack/03_Hat.wav", 'rb'))
+wfs.append(wave.open("audio_samples/multitrack/05_Bass.wav", 'rb'))
+wfs.append(wave.open("audio_samples/multitrack/06_ElecGtr1.wav", 'rb'))
+wfs.append(wave.open("audio_samples/multitrack/07_ElecGtr2.wav", 'rb'))
+wfs.append(wave.open("audio_samples/multitrack/08_ElecGtr3.wav", 'rb'))
+wfs.append(wave.open("audio_samples/multitrack/09_LeadVox.wav", 'rb'))
+wfs.append(wave.open("audio_samples/multitrack/10_BackingVox1.wav", 'rb'))
+wfs.append(wave.open("audio_samples/multitrack/11_BackingVox2.wav", 'rb'))
+wfs.append(wave.open("audio_samples/multitrack/12_BackingVox3.wav", 'rb'))
+wfs.append(wave.open("audio_samples/multitrack/13_BackingVox4.wav", 'rb'))
+wfs.append(wave.open("audio_samples/multitrack/14_BackingVox5.wav", 'rb'))
 '''
 
 # instantiate PyAudio (1)
@@ -42,10 +42,12 @@ while True:
     for wf in wfs:
         data = wf.readframes(CHUNK)
         if data == b'':
-            for wf in wfs:
-                wf.rewind()
+            for wfr in wfs:
+                wfr.rewind()
             loop_cnt += 1
+            data_sum = 0
             data = wf.readframes(CHUNK)
+        #print(numpy.fromstring(data, numpy.int16))
         data_sum += numpy.fromstring(data, numpy.int16)
     data_sum = (data_sum).astype(numpy.int16)
     stream.write(data_sum.tostring())
