@@ -2,43 +2,51 @@ import threading
 import soundfile
 import sounddevice as sd
 import soundfile as sf
-
-data, fs = sf.read("audio_samples/tick.wav", dtype='float32')
-data2, fs2 = sf.read("audio_samples/tock.wav", dtype='float32')
-status = sd.wait()
-tick = 1
-count = 4
+import time
 
 class Metronome(threading.Thread):
 
-
-    __init__(self, bpm = 100):
+    def __init__(self, bpm = 100):
+        threading.Thread.__init__(self)
         self.bpm = bpm
-        self.time = 60/self.bpm
+        self.timing = 60/bpm
+        self.tick = 1
+        self.count = 4
+        self.data, self.fs = sf.read("audio_samples/tick.wav", dtype='float32')
+        self.data2, self.fs2 = sf.read("audio_samples/tock.wav", dtype='float32')
+        self.run_flag = True
 
+    def run(self):
+        while self.run_flag:
+            self.beat()
+            time.sleep(self.timing)
 
-    def run():
-        
+    def play(self):
+        self.run_flag = True
 
-    def beat():
-        sd.play(data, fs)
-        print(tick)
-        if tick == 1:
-            sd.play(data2, fs2)
+    def stop(self):
+        self.run_flag = False
+
+    def beat(self):
+        sd.play(self.data, self.fs)
+        #print(self.tick)
+        if self.tick == 1:
+            sd.play(self.data2, self.fs2)
         else:
-            sd.play(data, fs)
+            sd.play(self.data, self.fs)
 
-        if tick == count:
-            tick = 0
-        tick += 1
-        t = threading.Timer(time, beat)
-        t.start()
+        if self.tick == self.count:
+            self.tick = 0
+        self.tick += 1
 
-
-
-
+    def set_tempo(self, bpm):
+        self.bpm = bpm
+        self.timing = 60/bpm
 
 
+metronome = Metronome()
+metronome.start()
 
-t = threading.Timer(time, beat)
-t.start() # after 30 seconds, "hello, world" will be printed
+while True:
+    tempo = int(input("Input tempo: "))
+    metronome.set_tempo(tempo)

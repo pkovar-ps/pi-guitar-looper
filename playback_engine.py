@@ -66,7 +66,8 @@ class AudioPlayback(threading.Thread):
         return (self.wfs[0].tell() * 100) / self.wav_frames
 
 
-audioPlayback = AudioPlayback("audio_samples/sample.wav")
+#audioPlayback = AudioPlayback("audio_samples/sample.wav")
+audioPlayback = AudioPlayback("track_1.wav")
 '''
 audioPlayback = AudioPlayback("audio_samples/multitrack/03_Hat.wav")
 audioPlayback.add_track("audio_samples/multitrack/02_Snare.wav")
@@ -80,7 +81,7 @@ print("Playback started")
 while audioPlayback.stream.is_active():
     time.sleep(0.1)
     print("Loop:", audioPlayback.loop_cnt, "Progress: ", audioPlayback.get_progress(), " %")
-    if audioPlayback.loop_cnt == 2:
+    if audioPlayback.loop_cnt == 4:
         audioPlayback.stop()
         break
         

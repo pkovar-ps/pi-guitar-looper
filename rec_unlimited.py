@@ -8,6 +8,7 @@ import argparse
 import tempfile
 import queue
 import sys
+import keyboard
 
 
 def int_or_str(text):
@@ -49,8 +50,7 @@ try:
         # soundfile expects an int, sounddevice provides a float:
         args.samplerate = int(device_info['default_samplerate'])
     if args.filename is None:
-        args.filename = tempfile.mktemp(prefix='delme_rec_unlimited_',
-                                        suffix='.wav', dir='')
+        args.filename = 'track_1.wav'
     q = queue.Queue()
 
     def callback(indata, frames, time, status):
@@ -68,6 +68,11 @@ try:
             print('press Ctrl+C to stop the recording')
             print('#' * 80)
             while True:
+                if keyboard.is_pressed('r'):
+                    break
+            print('recording started')
+            while True:
+                
                 file.write(q.get())
 
 except KeyboardInterrupt:
