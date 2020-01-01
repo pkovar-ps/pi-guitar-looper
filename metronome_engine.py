@@ -3,13 +3,14 @@ import soundfile
 import sounddevice as sd
 import soundfile as sf
 import time
+import pause
 
 class Metronome(threading.Thread):
 
     def __init__(self, bpm = 100):
         threading.Thread.__init__(self)
         self.bpm = bpm
-        self.timing = 60/bpm
+        self.timing = 60000/bpm
         self.tick = 1
         self.count = 4
         self.data, self.fs = sf.read("audio_samples/tick.wav", dtype='float32')
@@ -19,7 +20,8 @@ class Metronome(threading.Thread):
     def run(self):
         while self.run_flag:
             self.beat()
-            time.sleep(self.timing)
+            pause.milliseconds(self.timing)
+            #time.sleep(self.timing)
 
     def play(self):
         self.run_flag = True
@@ -42,11 +44,3 @@ class Metronome(threading.Thread):
         self.bpm = bpm
         self.timing = 60/bpm
         print("Timing: ", self.timing)
-
-
-metronome = Metronome()
-metronome.start()
-
-while True:
-    tempo = int(input("Input tempo: "))
-    metronome.set_tempo(tempo)

@@ -19,6 +19,7 @@ class AudioPlayback(threading.Thread):
         self.run_flag = False
         self.initiate(track)
         self.wav_frames = self.wfs[0].getnframes()
+        self.framerate = self.wfs[0].getframerate()
 
     def add_track(self, track):
         print("Debug: adding track: " + track)
@@ -64,28 +65,8 @@ class AudioPlayback(threading.Thread):
 
     def get_progress(self):
         return (self.wfs[0].tell() * 100) / self.wav_frames
-
-
-#audioPlayback = AudioPlayback("audio_samples/sample.wav")
-audioPlayback = AudioPlayback("track_1.wav")
-'''
-audioPlayback = AudioPlayback("audio_samples/multitrack/03_Hat.wav")
-audioPlayback.add_track("audio_samples/multitrack/02_Snare.wav")
-'''
-audioPlayback.start()
-print("Initiated")
-
-audioPlayback.play()
-print("Playback started")
-
-while audioPlayback.stream.is_active():
-    time.sleep(0.1)
-    print("Loop:", audioPlayback.loop_cnt, "Progress: ", audioPlayback.get_progress(), " %")
-    if audioPlayback.loop_cnt == 4:
-        audioPlayback.stop()
-        break
-        
-audioPlayback.join()
-audioPlayback.destroy()
-
-print("end main")
+    
+    def get_progress_sec(self):
+        period = 1/self.framerate
+        track_length = period * self.wav_frames
+        return period * self.wfs[0].tell()

@@ -50,7 +50,7 @@ try:
         # soundfile expects an int, sounddevice provides a float:
         args.samplerate = int(device_info['default_samplerate'])
     if args.filename is None:
-        args.filename = 'track_1.wav'
+        args.filename = 'track_11.wav'
     q = queue.Queue()
 
     def callback(indata, frames, time, status):
